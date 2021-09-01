@@ -1,20 +1,16 @@
 import pyttsx3
 import speech_recognition as sr
-
 import datetime
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 # print(voices[0].id)
-
 engine.setProperty('voice', voices[0].id)
 
 
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
-
-
 
 
 def wishMe():
@@ -32,29 +28,40 @@ def wishMe():
     else:
         speak("Get recharged now. Good Night")
 
-    speak("I am Jarvis at your service")
+    speak("I am Jarvis at your service. how can i help you?")
 
 
-def takeCommand():
-    r = sr.Recognizer
-    with sr.Microphone as source:
-        print("Listening...")
-        audio = r.listen(source)
+
+def commend():
+
+    listener = sr.Recognizer()
 
     try:
-        print("Recognizing...")
-        query = r.recognize_google(audio, language="en-US")
-        print(f"User said: {query} \n")
-
-    except Exception as e:
-        speak("Say that again")
-        return "None"
-    return query
-
-
-if __name__ == '__main__':
-    wishMe()
-    takeCommand()
+        with sr.Microphone() as source:
+            print('I am Listening...')
+            voice = listener.listen(source)
+            command = listener.recognize_google(voice)
+            command = command.lower()
+            print(command)
+    except:
+        engine.say('Say that again...')
+        engine.runAndWait()
+        commend()
+# def takeCommand():
+#     r = sr.Recognizer
+#     with sr.Microphone as source:
+#         speak("Listening...")
+#         audio = r.listen(source)
+#
+#     try:
+#         speak("Recognizing...")
+#         query = r.recognize_google(audio, language="en-US")
+#         print(f"User said: {query} \n")
+#
+#     except Exception as e:
+#         speak("Say that again")
+#         return "None"
+#     return query
 
 # listener = sr.Recognizer()
 # try:
@@ -65,3 +72,13 @@ if __name__ == '__main__':
 #         print(command)
 # except:
 #     pass
+
+
+
+if __name__ == '__main__':
+    wishMe()
+    commend()
+
+
+
+    # takeCommand()
