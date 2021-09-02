@@ -1,6 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 import datetime
+import wikipedia
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -31,54 +32,31 @@ def wishMe():
     speak("I am Jarvis at your service. how can i help you?")
 
 
-
 def commend():
-
     listener = sr.Recognizer()
-
     try:
         with sr.Microphone() as source:
             print('I am Listening...')
             voice = listener.listen(source)
-            command = listener.recognize_google(voice)
-            command = command.lower()
-            print(command)
+            query = listener.recognize_google(voice)
+            query = query.lower()
+            print("User said:" + query)
     except:
         engine.say('Say that again...')
         engine.runAndWait()
         commend()
-# def takeCommand():
-#     r = sr.Recognizer
-#     with sr.Microphone as source:
-#         speak("Listening...")
-#         audio = r.listen(source)
-#
-#     try:
-#         speak("Recognizing...")
-#         query = r.recognize_google(audio, language="en-US")
-#         print(f"User said: {query} \n")
-#
-#     except Exception as e:
-#         speak("Say that again")
-#         return "None"
-#     return query
-
-# listener = sr.Recognizer()
-# try:
-#     with sr.Microphone() as source:
-#         print('listening')
-#         voice = listener.listen(source)
-#         command = listener.recognize_google(voice)
-#         print(command)
-# except:
-#     pass
-
 
 
 if __name__ == '__main__':
     wishMe()
-    commend()
+    # logic for executing task in command
+    while True:
+        if "wikipedia" in query:
+            speak("Searching wikipedia...")
+            cmd = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to wikipedia...")
+            print(results)
+            speak(results)
 
 
-
-    # takeCommand()
