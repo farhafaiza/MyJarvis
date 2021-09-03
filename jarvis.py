@@ -35,7 +35,7 @@ def command():
             query = listener.recognize_google(voice)
             query = query.lower()
             print("User said:" + query)
-            if "wikipedia" in query:
+            if "hey jarvis tell me" in query:
                 searchWiki(query)
     except:
         engine.say('Say that again...')
@@ -45,7 +45,7 @@ def command():
 
 def searchWiki(searchQuery):
     speak("Searching wikipedia...")
-    cmd = searchQuery.replace("wikipedia", "")
+    cmd = searchQuery.replace("hey jarvis tell me", "")
     results = wikipedia.summary(cmd, sentences=2)
     speak("According to wikipedia...")
     print(results)
