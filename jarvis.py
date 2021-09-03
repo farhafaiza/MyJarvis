@@ -51,10 +51,6 @@ def command():
             elif 'open github' in query:    # Say "open github" to open github in your desktop
                 git_path = "C:\\Users\\Unique\\AppData\\Local\\GitHubDesktop\\GitHubDesktop.exe"
                 os.startfile(git_path)
-
-
-
-
     except:
         engine.say('Say that again...')
         engine.runAndWait()
