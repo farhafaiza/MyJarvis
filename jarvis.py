@@ -2,6 +2,8 @@ import pyttsx3
 import speech_recognition as sr
 import datetime
 import wikipedia
+import webbrowser
+import os
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -35,8 +37,24 @@ def command():
             query = listener.recognize_google(voice)
             query = query.lower()
             print("User said:" + query)
-            if "hey jarvis tell me" in query:
-                searchWiki(query)
+            if 'jarvis tell me' in query:   # Say "Jarvis tell me" to get info from wikipedia
+                what = query.replace('jarvis tell me', '')
+                searchWiki(what)
+
+            elif 'open youtube' in query:  # Say "open youtube." to open youtube
+                webbrowser.open("youtube.com")
+            elif 'open google' in query: # Say "open google." to open google
+                webbrowser.open("google.com")
+            elif 'the time' in query:     # Say "the time" to tell you time
+                say_time = datetime.datetime.now().strftime("%H:%M:%S")
+                speak("the time is" + say_time)
+            elif 'open github' in query:    # Say "open github" to open github in your desktop
+                git_path = "C:\\Users\\Unique\\AppData\\Local\\GitHubDesktop\\GitHubDesktop.exe"
+                os.startfile(git_path)
+
+
+
+
     except:
         engine.say('Say that again...')
         engine.runAndWait()
@@ -44,12 +62,17 @@ def command():
 
 
 def searchWiki(searchQuery):
-    speak("Searching wikipedia...")
-    cmd = searchQuery.replace("hey jarvis tell me", "")
-    results = wikipedia.summary(cmd, sentences=2)
-    speak("According to wikipedia...")
-    print(results)
-    speak(results)
+    try:
+        speak("Searching wikipedia...")
+        cmd = searchQuery.replace("wikipedia", "")
+        results = wikipedia.summary(cmd, 2)
+        speak("According to wikipedia...")
+        print(results)
+        speak(results)
+    except:
+        sorry = 'Hey, I am Unable to find, I am really Sorry :('
+        print(sorry)
+        speak(sorry)
 
 
 if __name__ == '__main__':
