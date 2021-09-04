@@ -5,6 +5,7 @@ import wikipedia
 import webbrowser
 import os
 
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
@@ -29,24 +30,32 @@ def wishMe():
 
 
 def command():
-    listener = sr.Recognizer()
     try:
         with sr.Microphone() as source:
             print('I am Listening...')
+
+            listener = sr.Recognizer()
+            listener.pause_threshold = 0.8  # Represents the minimum length of silence (in seconds)
+            listener.energy_threshold = 50  # Values below this threshold are considered silence
+            listener.adjust_for_ambient_noise(source, duration=1)
+            listener.operation_timeout = None  # Represents the timeout (seconds) for internal operations
+            listener.dynamic_energy_threshold = True   # energy level for sounds should be auto adjusted
+            listener.dynamic_energy_adjustment_damping = 0.15
+
             voice = listener.listen(source)
             query = listener.recognize_google(voice)
             query = query.lower()
             print("User said:" + query)
             if 'jarvis tell me' in query:   # Say "Jarvis tell me" to get info from wikipedia
-                what = query.replace('jarvis tell me', '')
+                what = query.replace('jarvis tell me', ' ')
+                print("Searching" + what)
                 searchWiki(what)
-
             elif 'open youtube' in query:  # Say "open youtube." to open youtube
                 webbrowser.open("youtube.com")
-            elif 'open google' in query: # Say "open google." to open google
+            elif 'open google' in query:  # Say "open google." to open google
                 webbrowser.open("google.com")
             elif 'the time' in query:     # Say "the time" to tell you time
-                say_time = datetime.datetime.now().strftime("%H:%M:%S")
+                say_time = datetime.datetime.now().strftime("%#I %#M %p")
                 speak("the time is" + say_time)
             elif 'open github' in query:    # Say "open github" to open github in your desktop
                 git_path = "C:\\Users\\Unique\\AppData\\Local\\GitHubDesktop\\GitHubDesktop.exe"
@@ -62,11 +71,10 @@ def searchWiki(searchQuery):
         speak("Searching wikipedia...")
         cmd = searchQuery.replace("wikipedia", "")
         results = wikipedia.summary(cmd, 2)
-        speak("According to wikipedia...")
         print(results)
-        speak(results)
+        speak("According to wikipedia..." + results)
     except:
-        sorry = 'Hey, I am Unable to find, I am really Sorry :('
+        sorry = "I am Sorry, I don't know"
         print(sorry)
         speak(sorry)
 
